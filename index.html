@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hallo</h1>
+    <button onclick="scan()">Scan</button>
+    <div id="image-wrapper"></div>
+    <script>
+      let clientId = '';
+      const images = [];
+      const localSocket = new WebSocket('ws://localhost:5353');
+      localSocket.onopen = function() {
+        console.log('connected to local socket');
+      };
+
+      const beSocket = new WebSocket('ws://localhost:8080');
+      beSocket.onopen = function() {
+        console.log('connected to backend socket');
+        beSocket.send(
+          JSON.stringify({
+            event: 'identity',
+          }),
+        );
+      };
+
+      beSocket.onmessage = function({ data }) {
+        const [event, message] = data.replace(/"/g, '').split('|');
+        console.log(event);
+        console.log(message);
+
+        switch (event) {
+          case 'id':
+            clientId = message;
+            break;
+          case 'image':
+            images.push(message);
+            document.getElementById('image-wrapper').innerHTML = images.map(
+              f => `<img src="data:image/jpeg;base64,${f}"/>`,
+            );
+            break;
+          default:
+            break;
+        }
+      };
+
+      function scan() {
+        console.log('scan');
+        localSocket.send(
+          JSON.stringify({
+            event: 'scan',
+            data: { clientId },
+          }),
+        );
+      }
+    </script>
+  </body>
+</html>
