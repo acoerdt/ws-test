@@ -1,4 +1,11 @@
+# Wie kann man das hier testen?
+
+- nest-Applikation mit "npm run start:dev" starten
+- lokalen WS-Server mit "ts-node local_ws.ts" starten
+- index.html im Browser öffnen
+
 # Wie ist der Flow?
+
 - User ruft Seite auf (index.html)
   - Dort meldet er sich automatisch an lokalem WS-Server an
   - Dort meldet er sich automatisch an Backend WS-Server an
@@ -10,6 +17,7 @@
 - Client nimmt Nachricht an zeigt z.B. gerade gescanntes Bild an
 
 # Anderer Weg
+
 - lokaler WS-Server schickt Bild zurück an Client
 - User bearbeitet Bild (drehen, zuschneiden) im FE und schickt Bild via Post-Request an Backend
 - Backend prüft bei jedem Post-Request das eingehende Bild und und ob alle Bedingungen für das gerade zu scannende Dokument erfüllt sind (z.B. sind alle Seiten vorhanden, etc.)
